@@ -23,20 +23,12 @@
   "permissions": [
     "notifications",
     "tabs",
-    "https://app.yodiz.com/plan/pages"
+    "https://app.yodiz.com/plan/pages/*"
   ],
   "content_scripts": [
     {
       "matches": [
-        "https://www.google.com/*"
-      ],
-      "css": [
-        "src/inject/inject.css"
-      ]
-    },
-    {
-      "matches": [
-        "https://www.google.com/*"
+        "https://app.yodiz.com/plan/pages/*"
       ],
       "js": [
         "src/inject/inject.js"
