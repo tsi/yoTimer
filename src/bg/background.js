@@ -11,3 +11,10 @@
 //  	chrome.pageAction.show(sender.tab.id);
 //    sendResponse();
 //  });
+
+chrome.browserAction.onClicked.addListener(function(tab) {
+  chrome.tabs.create({'url': chrome.extension.getURL('src/timer/www/index.html')}, function(tab) {
+    console.log('Background');
+    // Tab opened.
+  });
+});

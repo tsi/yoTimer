@@ -1,0 +1,12 @@
+// ------------------------------------------
+//          Helper mixins and classes
+// ------------------------------------------
+
+// Clearfix
+@mixin clear {
+  &:after {
+    content: " ";
+    display: table;
+    clear: both;
+  }
+}
