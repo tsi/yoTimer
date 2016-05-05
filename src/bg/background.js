@@ -19,10 +19,37 @@ chrome.browserAction.onClicked.addListener(function(tab) {
     // itemType = TASK || 101_ERROR
     // effortSpent = "00:20"
     // loggedTime = "05/05/2016 13:11"
-
     var logTime = function(itemType, taskId, effortSpent, loggedTime) {
-      headerScope.updateInlineEffortSpend(taskId, itemType, loggedTime,  effortSpent, "", "");
+
+      var inTicket = false;
+      if (inTicket) {
+        window.frames.remoteCommand.updateEffortSpend([{
+          name: "loggedTime",
+          value: loggedTime
+        }, {
+          name: "taskId",
+          value: taskId
+        }, {
+          name: "effortSpent",
+          value: effortSpent
+        }, {
+          name: "itemType",
+          value: itemType
+        },
+          {
+            name: "comment",
+            value: comment
+          }, {
+            name: "userId",
+            value: userId
+          }
+        ]);
+      }
+      else {
+        headerScope.updateInlineEffortSpend(taskId, itemType, loggedTime,  effortSpent, "", "");
+      }
     }
+
 
   });
 });
