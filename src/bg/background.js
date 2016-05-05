@@ -16,6 +16,10 @@ chrome.browserAction.onClicked.addListener(function(tab) {
   chrome.tabs.create({'url': chrome.extension.getURL('src/timer/www/index.html')}, function(tab) {
     console.log('Background');
     // Tab opened.
+    // itemType = TASK || 101_ERROR
+    // effortSpent = "00:20"
+    // loggedTime = "05/05/2016 13:11"
+
     var logTime = function(itemType, taskId, effortSpent, loggedTime) {
       headerScope.updateInlineEffortSpend(taskId, itemType, loggedTime,  effortSpent, "", "");
     }
