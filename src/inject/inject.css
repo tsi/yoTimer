@@ -1,3 +1,6 @@
 /**
  * Place your custom CSS styles here.
  **/
+a.start-stop {
+  /*pointer-events: none;*/
+}

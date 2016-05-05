@@ -29,7 +29,11 @@
       "matches": [
         "https://app.yodiz.com/plan/pages/*"
       ],
+      "css": [
+        "src/inject/inject.css"
+      ],
       "js": [
+        "src/inject/jquery.min.js",
         "src/inject/inject.js"
       ]
     }

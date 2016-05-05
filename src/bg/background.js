@@ -48,7 +48,7 @@ chrome.browserAction.onClicked.addListener(function(tab) {
       else {
         headerScope.updateInlineEffortSpend(taskId, itemType, loggedTime,  effortSpent, "", "");
       }
-    }
+    };
 
 
   });
