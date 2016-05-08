@@ -12,33 +12,28 @@
   };
 
   // Init
-  var init = function() {
 
-    $(document).on('DOMNodeInserted', function() {
-      $('a.start-stop').not('.yo-timer-processed')
-        .addClass('yo-timer-processed')
-        .after(
-          $('<a href="" class="yo-timer-btn">Start Yo Timer</a>')
-            .on('click', function(e) {
-              e.preventDefault();
-              e.stopPropagation();
-              console.log('START');
-              logTime(); // Not defined
-            })
-        );
-    });
-
-  };
 
   chrome.extension.sendMessage({}, function(response) {
 
-    var readyStateCheckInterval = setInterval(function() {
-      if (document.readyState === "complete") {
-        clearInterval(readyStateCheckInterval);
-        console.log('readyState === "complete"');
-        init();
-      }
-    }, 100);
+    var load = function (src, on_load, on_error) {
+      var el = document.createElement("script");
+      el.setAttribute("src", src);
+      if (on_load != null) { el.addEventListener("load", on_load); }
+      if (on_error != null) { el.addEventListener("error", on_error); }
+      document.body.appendChild(el);
+      return el;
+    };
+    load("../tyapi.js", function () {
+      execute(function(){$.noop();});
+    });
+    //var readyStateCheckInterval = setInterval(function() {
+    //  if (document.readyState === "complete") {
+    //    clearInterval(readyStateCheckInterval);
+    //    console.log('readyState === "complete"');
+    //    init();
+    //  }
+    //}, 100);
   });
 
 })();
