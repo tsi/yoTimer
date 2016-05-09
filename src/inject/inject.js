@@ -15,22 +15,31 @@
     // effortSpent = "00:20"
     // loggedTime = "05/05/2016 13:11"
     var logTime = function(itemId, itemType, effortSpent, loggedTime) {
-      debugger;
       headerScope.updateInlineEffortSpend(itemId, itemType, loggedTime,  effortSpent, "", "");
     };
 
     // Handle the stop-watch
     var timer = function(state) {
-      var seconds = 0, minutes = 0, hours = 0, time,
+      var yo, diffMs, seconds = 0, minutes = 0, hours = 0, time,
           watch = $('.yo-timer-watch'),
           title = $('head title');
+
+      yo = JSON.parse(localStorage.getItem('yoTimer')) ? JSON.parse(localStorage.getItem('yoTimer')) : false;
+      if (yo !== false) {
+        yo.loggedTime =  new Date();
+        diffMs = yo.loggedTime - yo.time;
+        hours = Math.round(diffMs / 3600000); // hours
+        minutes = Math.round((diffMs % 3600000) / 60000); // minutes
+        seconds = Math.round(((diffMs % 3600000) % 60000) / 1000); // seconds
+      }
+
       // Start / Stop
       if (state == 'start') {
         if (watch.length < 1) {
           // Create the stop-watch
           watch = $('<time class="yo-timer-watch">00:00:00</time>').appendTo('body');
         }
-        localStorage.setItem('yoTimerTitle', title.text());
+        localStorage.setItem('yoTimer.title', title.text());
         var add = function() {
           seconds++;
           if (seconds >= 60) {
@@ -52,25 +61,26 @@
       else {
         clearInterval(interval);
         watch.remove();
-        title.text(localStorage.getItem('yoTimerTitle'));
+        title.text(localStorage.getItem('yoTimer.title'));
       }
     };
 
     var toggleTimer = function(btn) {
       var yo, hours, minutes, diffMs, item = btn.closest('.inrbx[item-id]');
       if ($('body').hasClass('yo-timer-running')) {
-        // Timer running, log it.
-        $('body').removeClass('yo-timer-running')
-        item.removeClass('yo-timer-running');
-        btn.text('Start Yo Timer');
+        // Timer running, stop it.
+        timer('stop');
+        // Log it
         yo = JSON.parse(localStorage.getItem('yoTimer'));
         yo.loggedTime =  new Date();
-        timer('stop');
         diffMs = yo.loggedTime - yo.time;
         hours = Math.round(diffMs / 3600000); // hours
         minutes = Math.round((diffMs % 3600000) / 60000); // minutes
-        debugger;
         logTime(yo.itemId, yo.itemType, hours+':'+minutes, yo.loggedTime);
+        // Reset it
+        $('body').removeClass('yo-timer-running');
+        item.removeClass('yo-timer-running');
+        btn.text('Start Yo Timer');
         localStorage.removeItem('yoTimer');
       }
       else {
@@ -83,7 +93,6 @@
           itemId: item.attr('item-id'),
           itemType: item.attr('itemtype')
         };
-        debugger;
         timer('start');
         localStorage.setItem('yoTimer', JSON.stringify(yo));
       }
@@ -98,10 +107,6 @@
 
     $(document).on('DOMNodeInserted', function() {
       // Todo throttle
-      if (activeItem) {
-        $('[item-id="'+activeItem+'"]').not('.yo-timer-running').addClass('yo-timer-running');
-      }
-
       $('div.the-time').not('.yo-timer-processed')
         .addClass('yo-timer-processed')
         .after(
@@ -112,6 +117,20 @@
               toggleTimer($(this));
             })
         );
+
+      if (activeItem) {
+        $('[item-id="'+activeItem+'"]').not('.yo-timer-running')
+          .addClass('yo-timer-running')
+          .find('.yo-timer-btn')
+          .text('Stop Yo Timer');
+      }
+
+    });
+
+    $(document).ready(function() {
+      if (JSON.parse(localStorage.getItem('yoTimer'))) {
+        timer('start');
+      }
     });
 
   };
