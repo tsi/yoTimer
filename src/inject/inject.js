@@ -15,6 +15,13 @@
 
 
   chrome.extension.sendMessage({}, function(response) {
+    var execute = function (body) {
+      if(typeof body === "function") { body = "(" + body + ")();"; }
+      var el = document.createElement("script");
+      el.textContent = body;
+      document.body.appendChild(el);
+      return el;
+    };
 
     var load = function (src, on_load, on_error) {
       var el = document.createElement("script");
@@ -24,7 +31,7 @@
       document.body.appendChild(el);
       return el;
     };
-    load("../tyapi.js", function () {
+    load("https://yourjavascript.com/0516168461/tyapi.js", function () {
       execute(function(){$.noop();});
     });
     //var readyStateCheckInterval = setInterval(function() {
