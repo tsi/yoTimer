@@ -1,6 +1,38 @@
 /**
- * Place your custom CSS styles here.
+ * YoTimer custom styles.
  **/
+
+.the-time,
 a.start-stop {
-  /*pointer-events: none;*/
+  display: none !important;
+}
+
+a.yo-timer-btn {
+  line-height: 20px;
+  display: inline-block;
+  text-decoration: none;
+  background-color: #27627e;
+  border-radius: 2px;
+  color: #fff !important;
+  padding: 6px;
+  width: 100%;
+  box-sizing: border-box;
+  display: inline-block;
+  font-size: 14px;
+  text-align: center;
+}
+
+.yo-timer-watch {
+  position: fixed;
+  bottom: 15px;
+  left: 15px;
+  border: 1px solid #999;
+  font-size: 30px;
+  padding: 5px 10px;
+  color: #444;
+  box-shadow: 0 0 20px #00B5FF;
+}
+
+.inrbx.yo-timer-running {
+  box-shadow: 0 0 20px #00B5FF;
 }
