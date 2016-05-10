@@ -9,12 +9,6 @@
     }
     var interval;
 
-    // Check if there's an active item.
-    var activeItem = false;
-    var yoTimer = getTimer();
-    if (yoTimer) {
-      activeItem = yoTimer.itemId;
-    }
 
     // Log time
     // ---------
