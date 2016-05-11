@@ -11,11 +11,11 @@
     var FBTimer = {itemId : false, itemType : false, status : 0, startTime : false};
 
     var getDiffInString = function() {
-      if (FBTimer.startTime == false) {
-        return "00:00:00";
-      }
       var seconds, minutes, hours, time, loggedTime = Date.now();
       var diffS = (loggedTime - FBTimer.startTime) / 1000;
+      if (diffS < 1) {
+        return "00:00:00";
+      }
 
       // 2- Extract hours:
       hours = parseInt( diffS / 3600 ); // 3,600 seconds in 1 hour
@@ -72,58 +72,6 @@
       headerScope.updateInlineEffortSpend(itemId, itemType, loggedTime,  effortSpent, "", "");
     };
 
-    // Handle the stop-watch
-//    var timer = function(state) {
-//      var yo, diffS, seconds = 0, minutes = 0, hours = 0, time,
-//          watch = $('.yo-timer-watch'),
-//          title = $('head title');
-//
-//      yo = getTimer();
-//      if (yo !== false) {
-//        var loggedTime = new Date();
-//        diffS = (loggedTime - yo.startTime) / 1000;
-//
-//        // 2- Extract hours:
-//        hours = parseInt( diffS / 3600 ); // 3,600 seconds in 1 hour
-//        diffS = diffS % 3600; // seconds remaining after extracting hours
-//        // 3- Extract minutes:
-//        minutes = parseInt( diffS / 60 ); // 60 seconds in 1 minute
-//        // 4- Keep only seconds not extracted to minutes:
-//        seconds = diffS % 60;
-//      }
-//
-//      // Start / Stop
-//      if (state == 'start') {
-//        if (watch.length < 1) {
-//          // Create the stop-watch
-//          watch = $('<time class="yo-timer-watch">00:00:00</time>').appendTo('body');
-//        }
-//        localStorage.setItem('yoTimer.title', title.text());
-//        var add = function() {
-//          seconds++;
-//          if (seconds >= 60) {
-//            seconds = 0;
-//            minutes++;
-//            if (minutes >= 60) {
-//              minutes = 0;
-//              hours++;
-//            }
-//          }
-//          time = ('0' + hours).substr(-2) + ':' +
-//                 ('0' + minutes).substr(-2) + ':' +
-//                 ('0' + seconds).substr(-2);
-//          watch.text(time);
-//          title.text(time);
-//        };
-//        interval = setInterval(add, 1000);
-//      }
-//      else {
-//        clearInterval(interval);
-//        watch.remove();
-//        title.text(localStorage.getItem('yoTimer.title'));
-//      }
-//    };
-
     var toggleFBTimer = function(btn) {
       var item = btn.closest('.inrbx[item-id]');
       if (FBTimer.status == 0) {
@@ -160,6 +108,9 @@
       var title = $('head title');
 
       if (FBTimer.status == 1) {
+        $('[item-id="'+FBTimer.itemId+'"]').not('.yo-timer-running')
+          .addClass('yo-timer-running');
+
         $('body').addClass('yo-timer-running')
         if (watch.length < 1) {
           // Create the stop-watch
@@ -173,6 +124,8 @@
         interval = setInterval(add, 1000);
       }
       else {
+        debugger;
+        $('div.yo-timer-running').removeClass('yo-timer-running');
         $('body').removeClass('yo-timer-running');
         clearInterval(interval);
         watch.remove();
@@ -199,49 +152,6 @@
     var updateFBTimer = function(params) {
       timerRef.set(params);
     }
-
-
-
-//    var toggleTimer = function(btn) {
-//      var yo, hours, minutes, diffMs, item = btn.closest('.inrbx[item-id]');
-//      if ($('body').hasClass('yo-timer-running')) {
-//        // Timer running, stop it.
-//        timer('stop');
-//        // Log it
-//        yo = getTimer();
-//        yo.loggedTime =  new Date();
-//        diffMs = yo.loggedTime - yo.time;
-//        hours = Math.round(diffMs / 3600000); // hours
-//        minutes = Math.round((diffMs % 3600000) / 60000); // minutes
-//        logTime(yo.itemId, yo.itemType, hours+':'+minutes, yo.loggedTime);
-//        // Reset it
-//        localStorage.removeItem('yoTimer');
-//        $('body').removeClass('yo-timer-running');
-//        item.removeClass('yo-timer-running');
-//        btn.text('Start Yo Timer');
-//
-//      }
-//      else {
-//        // Timer stopped, start it.
-//        $('body').addClass('yo-timer-running')
-//        item.addClass('yo-timer-running');
-//        btn.text('Stop Yo Timer');
-//        yo = {
-//          time: Date.now(),
-//          itemId: item.attr('item-id'),
-//          itemType: item.attr('itemtype')
-//        };
-//        timer('start');
-//        localStorage.setItem('yoTimer', JSON.stringify(yo));
-//      }
-//    };
-
-    // var clickFn = function(e) {
-    //   debugger;
-    //   e.preventDefault();
-    //   e.stopPropagation();
-    // };
-    // document.body.addEventListener('click', clickFn, true);
 
     $(document).on('DOMNodeInserted', function() {
       // Todo throttle
@@ -275,13 +185,6 @@
       }
 
     });
-
-//    $(document).ready(function() {
-//      if (getTimer()) {
-//        $('body').addClass('yo-timer-running');
-//        timer('start');
-//      }
-//    });
 
   };
 
