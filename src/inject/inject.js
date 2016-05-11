@@ -121,10 +121,16 @@
           title.text(getDiffInString());
           watch.text(getDiffInString());
         };
-        interval = setInterval(add, 1000);
+
+
+        var initTimer = function() {
+          interval = setInterval(add, 1000);
+        }
+        setTimeout(initTimer, parseInt(Date.now()/1000) * 1000 + 1000)
+
+
       }
       else {
-        debugger;
         $('div.yo-timer-running').removeClass('yo-timer-running');
         $('body').removeClass('yo-timer-running');
         clearInterval(interval);
@@ -134,7 +140,7 @@
     }
 
     var startFBTimer = function(itemId, itemType) {
-      updateFBTimer({itemId : itemId, itemType : itemType, status : 1, startTime : Date.now()})
+      updateFBTimer({itemId : itemId, itemType : itemType, status : 1, startTime : parseInt(Date.now()/1000) * 1000 + 1000})
     }
 
     var stopFBTimer = function() {
