@@ -159,14 +159,14 @@
     return el;
   };
 
-  // var load = function (src, on_load, on_error) {
-  //   var el = document.createElement("script");
-  //   el.setAttribute("src", src);
-  //   if (on_load != null) { el.addEventListener("load", on_load); }
-  //   if (on_error != null) { el.addEventListener("error", on_error); }
-  //   document.body.appendChild(el);
-  //   return el;
-  // };
+  var load = function (src, on_load, on_error) {
+     var el = document.createElement("script");
+     el.setAttribute("src", src);
+     if (on_load != null) { el.addEventListener("load", on_load); }
+     if (on_error != null) { el.addEventListener("error", on_error); }
+     document.body.appendChild(el);
+     return el;
+  };
 
   chrome.extension.sendMessage({}, function(response) {
 
@@ -174,6 +174,7 @@
     var readyStateCheckInterval = setInterval(function() {
       if (document.readyState === "complete") {
         clearInterval(readyStateCheckInterval);
+        load("https://cdn.firebase.com/js/client/2.4.2/firebase.js");
         execute(init);
 
         // load("../tyapi.js", function () {
