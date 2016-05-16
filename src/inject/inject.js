@@ -28,17 +28,17 @@
         ('0' + minutes).substr(-2) + ':' +
         ('0' + seconds).substr(-2);
       return time;
-    }
+    };
 
 
     var timerValueCallback = function(snapshot) {
       var newVal = snapshot.val();
       var toggleTimer = false;
-      if (FBTimer.status == 0 && newVal.status == 1) {
+      if (FBTimer.status === 0 && newVal.status === 1) {
         //Start timer.
         toggleTimer = true;
       }
-      else if (FBTimer.status == 1 && newVal.status == 0) {
+      else if (FBTimer.status === 1 && newVal.status === 0) {
         //Stop timer
         toggleTimer = true;
       }
@@ -46,7 +46,7 @@
       if (toggleTimer) {
         toggleDomTimer();
       }
-    }
+    };
 
     var setFBRef = function() {
       timerRef = new Firebase("https://yotimer.firebaseio.com/" + ACTIVE_TIMER_PATH + "/" + user);
@@ -54,12 +54,12 @@
       timerRef.on("value", timerValueCallback, function (errorObject) {
         console.log("The read failed: " + errorObject.code);
       });
-    }
+    };
     setFBRef();
 
     var getTimer = function() {
       return FBTimer;
-    }
+    };
     var interval;
 
 
@@ -74,7 +74,7 @@
 
     var toggleFBTimer = function(btn) {
       var item = btn.closest('.inrbx[item-id]');
-      if (FBTimer.status == 0) {
+      if (FBTimer.status === 0) {
         startFBTimer(item.attr('item-id'), item.attr('itemtype'));
         item.addClass('yo-timer-running');
         btn.text('Stop Yo Timer');
@@ -90,7 +90,7 @@
         diffS = diffS % 3600; // seconds remaining after extracting hours
         // 3- Extract minutes:
         minutes = parseInt( diffS / 60 ); // 60 seconds in 1 minute
-        if (minutes == 0) {
+        if (minutes === 0) {
           minutes = 1;
         }
         logTime(FBTimer.itemId, FBTimer.itemType, hours+':'+minutes, loggedDate);
@@ -100,7 +100,7 @@
         item.removeClass('yo-timer-running');
         btn.text('Start Yo Timer');
       }
-    }
+    };
 
     var toggleDomTimer = function() {
 
@@ -111,7 +111,7 @@
         $('[item-id="'+FBTimer.itemId+'"]').not('.yo-timer-running')
           .addClass('yo-timer-running');
 
-        $('body').addClass('yo-timer-running')
+        $('body').addClass('yo-timer-running');
         if (watch.length < 1) {
           // Create the stop-watch
           watch = $('<time class="yo-timer-watch">'+ getDiffInString() +'</time>').appendTo('body');
@@ -125,8 +125,8 @@
 
         var initTimer = function() {
           interval = setInterval(add, 1000);
-        }
-        setTimeout(initTimer, parseInt(Date.now()/1000) * 1000 + 1000)
+        };
+        setTimeout(initTimer, parseInt(Date.now()/1000) * 1000 + 1000);
 
 
       }
@@ -137,27 +137,26 @@
         watch.remove();
         title.text(localStorage.getItem('yoTimer.title'));
       }
-    }
+    };
 
     var startFBTimer = function(itemId, itemType) {
-      updateFBTimer({itemId : itemId, itemType : itemType, status : 1, startTime : parseInt(Date.now()/1000) * 1000 + 1000})
-    }
+      updateFBTimer({itemId : itemId, itemType : itemType, status : 1, startTime : parseInt(Date.now()/1000) * 1000 + 1000});
+    };
 
     var stopFBTimer = function() {
-      updateFBTimer({itemId : false, itemType : false, status : 0, startTime : false})
-    }
+      updateFBTimer({itemId : false, itemType : false, status : 0, startTime : false});
+    };
 
     var updateFBLog = function(endTime, endDate, duration) {
-      debugger;
       logRef.child(endTime).set({itemId : FBTimer.itemId, itemType : FBTimer.itemType,
                                 startTime : FBTimer.startTime, endTime : endTime,
                                 loggedTime : endDate.toLocaleString(), duration : duration});
-    }
+    };
 
 
     var updateFBTimer = function(params) {
       timerRef.set(params);
-    }
+    };
 
     $(document).on('DOMNodeInserted', function() {
       // Todo throttle
@@ -204,31 +203,25 @@
     return el;
   };
 
+  // Load Firebase script fron CDN.
   var load = function (src, on_load, on_error) {
      var el = document.createElement("script");
      el.setAttribute("src", src);
-     if (on_load != null) { el.addEventListener("load", on_load); }
-     if (on_error != null) { el.addEventListener("error", on_error); }
+     if (on_load !== null) { el.addEventListener("load", on_load); }
+     if (on_error !== null) { el.addEventListener("error", on_error); }
      document.body.appendChild(el);
      return el;
   };
 
   chrome.extension.sendMessage({}, function(response) {
 
-
     var readyStateCheckInterval = setInterval(function() {
       if (document.readyState === "complete") {
         clearInterval(readyStateCheckInterval);
+
         load("https://cdn.firebase.com/js/client/2.4.2/firebase.js", function () {
-          execute(function(){$.noop();});
           execute(init);
         });
-
-
-
-        // load("../tyapi.js", function () {
-        //   execute(function(){$.noop();});
-        // });
 
      }
     }, 100);
