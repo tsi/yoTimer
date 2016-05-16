@@ -2,7 +2,7 @@
   "use strict";
 
   // Init
-  var init = function() {
+  var yoTimer = function() {
     var TIME_LOGS_PATH = 'timeLogs';
     var ACTIVE_TIMER_PATH = 'activeTimer';
     var user = 'yuval';
@@ -194,7 +194,7 @@
   };
 
   // http://stackoverflow.com/a/14901197/1660055
-  // Inject init() into page.
+  // Inject yoTimer() into page.
   var execute = function (body) {
     if(typeof body === "function") { body = "(" + body + ")();"; }
     var el = document.createElement("script");
@@ -220,7 +220,7 @@
         clearInterval(readyStateCheckInterval);
 
         load("https://cdn.firebase.com/js/client/2.4.2/firebase.js", function () {
-          execute(init);
+          execute(yoTimer);
         });
 
      }
