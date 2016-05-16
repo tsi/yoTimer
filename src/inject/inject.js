@@ -1,11 +1,11 @@
 (function() {
   "use strict";
 
-  // Init
+  // yoTimer
   var yoTimer = function() {
     var TIME_LOGS_PATH = 'timeLogs';
     var ACTIVE_TIMER_PATH = 'activeTimer';
-    var user = 'yuval';
+    var user = localStorage.getItem('yoTimer.user');
     var timerRef;
     var logRef;
     var FBTimer = {itemId : false, itemType : false, status : 0, startTime : false};
@@ -60,6 +60,7 @@
     var getTimer = function() {
       return FBTimer;
     };
+    var timerInteval;
 
 
     // Log time
@@ -121,6 +122,7 @@
 
 
         var initTimer = function() {
+          timerInteval = setInterval(add, 1000);
         };
         setTimeout(initTimer, parseInt(Date.now()/1000) * 1000 + 1000);
 
@@ -129,6 +131,7 @@
       else {
         $('div.yo-timer-running').removeClass('yo-timer-running');
         $('body').removeClass('yo-timer-running');
+        clearInterval(timerInteval);
         watch.remove();
         title.text(localStorage.getItem('yoTimer.title'));
       }
@@ -208,11 +211,19 @@
      return el;
   };
 
+  var yoTimerUser;
+
   chrome.extension.sendMessage({}, function(response) {
 
     var readyStateCheckInterval = setInterval(function() {
       if (document.readyState === "complete") {
         clearInterval(readyStateCheckInterval);
+
+        chrome.storage.sync.get({
+          yoTimerUid: ''
+        }, function(items) {
+          localStorage.setItem('yoTimer.user', items.yoTimerUid);
+        });
 
         load("https://cdn.firebase.com/js/client/2.4.2/firebase.js", function () {
           execute(yoTimer);
