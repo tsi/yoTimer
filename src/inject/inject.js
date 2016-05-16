@@ -60,7 +60,6 @@
     var getTimer = function() {
       return FBTimer;
     };
-    var interval;
 
 
     // Log time
@@ -80,8 +79,6 @@
         btn.text('Stop Yo Timer');
       }
       else {
-
-
         var loggedTime = Date.now(), diffS, hours, minutes, seconds;
         var loggedDate = new Date();
         diffS = (loggedTime - FBTimer.startTime) / 1000;
@@ -124,7 +121,6 @@
 
 
         var initTimer = function() {
-          interval = setInterval(add, 1000);
         };
         setTimeout(initTimer, parseInt(Date.now()/1000) * 1000 + 1000);
 
@@ -133,7 +129,6 @@
       else {
         $('div.yo-timer-running').removeClass('yo-timer-running');
         $('body').removeClass('yo-timer-running');
-        clearInterval(interval);
         watch.remove();
         title.text(localStorage.getItem('yoTimer.title'));
       }
