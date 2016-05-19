@@ -30,7 +30,6 @@
       return time;
     };
 
-
     var timerValueCallback = function(snapshot) {
       var newVal = snapshot.val();
       var toggleTimer = false;
@@ -72,12 +71,14 @@
       headerScope.updateInlineEffortSpend(itemId, itemType, loggedTime,  effortSpent, "", "");
     };
 
-    var toggleFBTimer = function(btn) {
-      var item = btn.closest('.inrbx[item-id]');
+    var toggleFBTimer = function(id) {
+      var item = $('.inrbx[item-id="' + id + '"]');
       if (FBTimer.status === 0) {
         startFBTimer(item.attr('item-id'), item.attr('itemtype'));
-        item.addClass('yo-timer-running');
-        btn.text('Stop Yo Timer');
+        item
+          .addClass('yo-timer-running')
+          .find('.yo-timer-btn')
+          .text('Stop Yo Timer');
       }
       else {
         var loggedTime = Date.now(), diffS, hours, minutes, seconds;
@@ -95,8 +96,10 @@
 
         updateFBLog(loggedTime, loggedDate, hours+':'+minutes);
         stopFBTimer();
-        item.removeClass('yo-timer-running');
-        btn.text('Start Yo Timer');
+        item
+          .removeClass('yo-timer-running')
+          .find('.yo-timer-btn')
+          .text('Start Yo Timer');
       }
     };
 
@@ -112,20 +115,22 @@
         $('body').addClass('yo-timer-running');
         if (watch.length < 1) {
           // Create the stop-watch
-          watch = $('<time class="yo-timer-watch">'+ getDiffInString() +'</time>').appendTo('body');
+          watch = $('<div class="yo-timer-watch" />');
+          watch.append('<time class="yo-timer-time">'+ getDiffInString() +'</time>');
+          watch.append($('<i title="Edit time"> E </i>').click(toggleTimeEdit));
+          watch.append($('<i title="Stop timer"> S </i>').click(stopFromTimer));
+          watch.appendTo('body');
         }
         localStorage.setItem('yoTimer.title', title.text());
         var add = function() {
           title.text(getDiffInString());
-          watch.text(getDiffInString());
+          watch.find('.yo-timer-time').text(getDiffInString());
         };
-
 
         var initTimer = function() {
           timerInteval = setInterval(add, 1000);
         };
         setTimeout(initTimer, parseInt(Date.now()/1000) * 1000 + 1000);
-
 
       }
       else {
@@ -151,13 +156,27 @@
                                 loggedTime : endDate.toLocaleString(), duration : duration});
     };
 
-
     var updateFBTimer = function(params) {
       timerRef.set(params);
     };
 
+    var toggleTimeEdit = function() {
+      debugger;
+    };
+
+    var stopFromTimer = function() {
+      var activeItem = false;
+      var yoTimer = getTimer();
+      if (yoTimer.status == 1) {
+        activeItem = yoTimer.itemId;
+      }
+      if (activeItem) {
+        toggleFBTimer(activeItem);
+      }
+    };
+
     $(document).on('DOMNodeInserted', function() {
-      // Todo throttle
+
       var activeItem = false;
       var yoTimer = getTimer();
       if (yoTimer.status == 1) {
@@ -172,7 +191,7 @@
               .on('click', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                toggleFBTimer($(this));
+                toggleFBTimer($(this).closest('.inrbx[item-id]').attr('item-id'));
               })
           );
         if (activeItem) {
