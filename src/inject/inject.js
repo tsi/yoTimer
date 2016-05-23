@@ -170,7 +170,8 @@
         0, 0 );
       newTimeStamp = newTimeStamp.getTime();
       // ToDo
-      // updateFBTimer({startTime : parseInt(newTimeStamp/1000) * 1000 + 1000});
+      FBTimer.startTime = parseInt(newTimeStamp/1000) * 1000 + 1000;
+      updateFBTimer(FBTimer);
     };
 
     var stopFBTimer = function() {
