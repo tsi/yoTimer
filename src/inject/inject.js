@@ -30,6 +30,17 @@
       return time;
     };
 
+    var getStartTimeInString = function() {
+      var minutes, hours, time, loggedTime = new Date(FBTimer.startTime);
+      // Hours part from the timestamp
+      hours = loggedTime.getHours();
+      // Minutes part from the timestamp
+      minutes = "0" + loggedTime.getMinutes();
+      // Will display time in 10:30 format
+      time = hours + ':' + minutes.substr(-2);
+      return time;
+    };
+
     var timerValueCallback = function(snapshot) {
       var newVal = snapshot.val();
       var toggleTimer = false;
@@ -117,10 +128,12 @@
           // Create the stop-watch
           watch = $('<div class="yo-timer-watch" />');
           watch.append('<time class="yo-timer-time">'+ getDiffInString() +'</time>');
+          watch.append('<time class="yo-timer-edit" contenteditable="true">'+ getStartTimeInString() +'</time>');
           watch.append($('<i title="Edit time"> E </i>').click(toggleTimeEdit));
           watch.append($('<i title="Stop timer"> S </i>').click(stopFromTimer));
           watch.appendTo('body');
         }
+
         localStorage.setItem('yoTimer.title', title.text());
         var add = function() {
           title.text(getDiffInString());
@@ -146,6 +159,20 @@
       updateFBTimer({itemId : itemId, itemType : itemType, status : 1, startTime : parseInt(Date.now()/1000) * 1000 + 1000});
     };
 
+    // newTime: "10:30"
+    var editFBTimer = function(newTime) {
+      // Leave only numbers ("10:30" -> "1030")
+      newTime = newTime.replace(/[^0-9]/g, '');
+      var newTimeStamp = new Date();
+      newTimeStamp.setHours(
+        parseInt(newTime.substr(-4, 2), 10),
+        parseInt(newTime.substr(-2), 10),
+        0, 0 );
+      newTimeStamp = newTimeStamp.getTime();
+      debugger;
+      updateFBTimer({startTime : parseInt(newTimeStamp/1000) * 1000 + 1000});
+    };
+
     var stopFBTimer = function() {
       updateFBTimer({itemId : false, itemType : false, status : 0, startTime : false});
     };
@@ -161,7 +188,11 @@
     };
 
     var toggleTimeEdit = function() {
-      debugger;
+      var watch = $('.yo-timer-watch');
+      if (watch.hasClass('editing')) {
+        editFBTimer(watch.find('.yo-timer-edit').text());
+      }
+      watch.toggleClass('editing');
     };
 
     var stopFromTimer = function() {

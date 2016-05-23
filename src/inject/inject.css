@@ -37,3 +37,12 @@ a.yo-timer-btn {
 .inrbx.yo-timer-running {
   box-shadow: 0 0 20px #00B5FF;
 }
+
+.yo-timer-edit,
+.yo-timer-watch.editing .yo-timer-time {
+  display: none;
+}
+
+.yo-timer-watch.editing .yo-timer-edit {
+  display: inline;
+}
