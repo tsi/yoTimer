@@ -169,8 +169,8 @@
         parseInt(newTime.substr(-2), 10),
         0, 0 );
       newTimeStamp = newTimeStamp.getTime();
-      debugger;
-      updateFBTimer({startTime : parseInt(newTimeStamp/1000) * 1000 + 1000});
+      // ToDo
+      // updateFBTimer({startTime : parseInt(newTimeStamp/1000) * 1000 + 1000});
     };
 
     var stopFBTimer = function() {
