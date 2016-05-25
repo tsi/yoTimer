@@ -162,14 +162,14 @@
     // newTime: "10:30"
     var editFBTimer = function(newTime) {
       // Leave only numbers ("10:30" -> "1030")
-      newTime = newTime.replace(/[^0-9]/g, '');
+      // Pad 9:30 with 0, so it's 09:30
+      newTime = "0" + newTime.replace(/[^0-9]/g, '');
       var newTimeStamp = new Date();
       newTimeStamp.setHours(
         parseInt(newTime.substr(-4, 2), 10),
         parseInt(newTime.substr(-2), 10),
         0, 0 );
       newTimeStamp = newTimeStamp.getTime();
-      // ToDo
       FBTimer.startTime = parseInt(newTimeStamp/1000) * 1000 + 1000;
       updateFBTimer(FBTimer);
     };
@@ -179,9 +179,14 @@
     };
 
     var updateFBLog = function(endTime, endDate, duration) {
-      logRef.child(endTime).set({itemId : FBTimer.itemId, itemType : FBTimer.itemType,
-                                startTime : FBTimer.startTime, endTime : endTime,
-                                loggedTime : endDate.toLocaleString(), duration : duration});
+      logRef.child(endTime).set({
+        itemId : FBTimer.itemId,
+        itemType : FBTimer.itemType,
+        startTime : FBTimer.startTime,
+        endTime : endTime,
+        loggedTime : endDate.toLocaleString(),
+        duration : duration
+      });
     };
 
     var updateFBTimer = function(params) {
