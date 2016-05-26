@@ -128,7 +128,18 @@
           // Create the stop-watch
           watch = $('<div class="yo-timer-watch" />');
           watch.append('<time class="yo-timer-time">'+ getDiffInString() +'</time>');
-          watch.append('<time class="yo-timer-edit" contenteditable="true">'+ getStartTimeInString() +'</time>');
+          watch.append(
+            $('<time />')
+              .addClass('yo-timer-edit')
+              .text(getStartTimeInString())
+              .prop('contenteditable', true)
+              .keypress(function(e) {
+                if (e.which === 13) {
+                  e.preventDefault();
+                  toggleTimeEdit();
+                }
+              })
+          );
           watch.append($('<i title="Edit time"> E </i>').click(toggleTimeEdit));
           watch.append($('<i title="Stop timer"> S </i>').click(stopFromTimer));
           watch.appendTo('body');
