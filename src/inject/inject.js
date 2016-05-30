@@ -154,7 +154,7 @@
         var initTimer = function() {
           timerInteval = setInterval(add, 1000);
         };
-        setTimeout(initTimer, parseInt(Date.now()/1000) * 1000 + 1000);
+        setTimeout(initTimer, (parseInt(Date.now()/1000) * 1000 + 1000) - Date.now());
 
       }
       else {
