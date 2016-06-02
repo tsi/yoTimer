@@ -92,7 +92,6 @@
           .text('Stop Yo Timer');
       }
       else {
-        debugger;
         if (id !== FBTimer.itemId) {
           // New timer while another is running
           // ToDo: ask if we want to switch task or start a new timer.
