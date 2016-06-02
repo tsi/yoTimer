@@ -8,7 +8,7 @@
     var user = localStorage.getItem('yoTimer.user');
     var timerRef;
     var logRef;
-    var FBTimer = {itemId : false, itemType : false, status : 0, startTime : false};
+    var FBTimer = {itemId : false, pId: false, itemType : false, status : 0, startTime : false};
 
     var getDiffInString = function() {
       var seconds, minutes, hours, time, loggedTime = Date.now();
@@ -85,13 +85,20 @@
     var toggleFBTimer = function(id) {
       var item = $('.inrbx[item-id="' + id + '"]');
       if (FBTimer.status === 0) {
-        startFBTimer(item.attr('item-id'), item.attr('itemtype'));
+        startFBTimer(item.attr('item-id'), item.attr('pid'), item.attr('itemtype'));
         item
           .addClass('yo-timer-running')
           .find('.yo-timer-btn')
           .text('Stop Yo Timer');
       }
       else {
+        debugger;
+        if (id !== FBTimer.itemId) {
+          // New timer while another is running
+          // ToDo: ask if we want to switch task or start a new timer.
+          alert("We didn't handle switching tasks. yet...");
+          return;
+        }
         var loggedTime = Date.now(), diffS, hours, minutes, seconds;
         var loggedDate = new Date();
         diffS = (loggedTime - FBTimer.startTime) / 1000;
@@ -140,8 +147,9 @@
                 }
               })
           );
-          watch.append($('<i title="Edit time"> E </i>').click(toggleTimeEdit));
-          watch.append($('<i title="Stop timer"> S </i>').click(stopFromTimer));
+          watch.prepend($('<i title="Edit time" class="icon icon-edit"></i>').click(toggleTimeEdit));
+          watch.append($('<i title="Stop timer" class="icon icon-stop"></i>').click(stopFromTimer));
+          watch.prepend($('<div class="timer-task">Ticket #' + FBTimer.itemId + '</div>').click(openItemDetails));
           watch.appendTo('body');
         }
 
@@ -166,8 +174,8 @@
       }
     };
 
-    var startFBTimer = function(itemId, itemType) {
-      updateFBTimer({itemId : itemId, itemType : itemType, status : 1, startTime : parseInt(Date.now()/1000) * 1000 + 1000});
+    var startFBTimer = function(itemId, pId, itemType) {
+      updateFBTimer({itemId : itemId, pId: pId, itemType : itemType, status : 1, startTime : parseInt(Date.now()/1000) * 1000 + 1000});
     };
 
     // newTime: "10:30"
@@ -186,7 +194,7 @@
     };
 
     var stopFBTimer = function() {
-      updateFBTimer({itemId : false, itemType : false, status : 0, startTime : false});
+      updateFBTimer({itemId : false, pId : false, itemType : false, status : 0, startTime : false});
     };
 
     var updateFBLog = function(endTime, endDate, duration) {
@@ -221,6 +229,10 @@
       if (activeItem) {
         toggleFBTimer(activeItem);
       }
+    };
+
+    var openItemDetails = function() {
+      popUpScope.openItemDetails("issue", FBTimer.itemId, FBTimer.pId, "_blank");
     };
 
     $(document).on('DOMNodeInserted', function() {
