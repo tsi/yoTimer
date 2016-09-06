@@ -33,7 +33,7 @@ a.yo-timer-btn {
   color: #444;
   background: #ddd;
   box-shadow: 0 0 20px #00B5FF;
-  z-index: 99;
+  z-index: 999999;
 }
 
 .inrbx.yo-timer-running {
