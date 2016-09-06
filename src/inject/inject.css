@@ -3,7 +3,9 @@
  **/
 
 .the-time,
-a.start-stop {
+a.start-stop,
+a.icon-play,
+#timer-config {
   display: none !important;
 }
 
@@ -31,6 +33,7 @@ a.yo-timer-btn {
   color: #444;
   background: #ddd;
   box-shadow: 0 0 20px #00B5FF;
+  z-index: 99;
 }
 
 .inrbx.yo-timer-running {
